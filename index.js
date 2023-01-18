@@ -5,6 +5,7 @@ $(document).ready(function () {
   var HorarioPais;
   var BandeiraPais;
   var PopulacaoPais;
+  var CapitalPais;
   var i = 0;
 
   var PesquisaPais;
@@ -51,6 +52,7 @@ function StartRequest(opcao, nome) {
   $(".conteudo_paises").html("")
 
   if (opcao == "Regiao") {
+    $(".name_pais").val("")
     if (nome == "Todos") {
 
       URLEnvio = "https://restcountries.com/v3.1/all"
@@ -90,16 +92,18 @@ function StartRequest(opcao, nome) {
 
   }).done(function (response) {
 
-
+    console.log(response)
 
     QuantidadePais = response.length
 
+    console.log("quant", QuantidadePais)
     for (i = 0; i < QuantidadePais; i++) {
 
       NomePais = response[i].translations.por.common
       HorarioPais = response[i].timezones[0]
       BandeiraPais = response[i].flags.png
       PopulacaoPais = response[i].population
+      CapitalPais = response[i].capital[0]
 
       if(opcao == "Nome"){
         $(".title-regiao h2").html(NomePais)
@@ -116,6 +120,7 @@ function StartRequest(opcao, nome) {
                 <h3>${NomePais}</h3>
             </div>
             <div class="info_pais">
+                <p>Capital: ${CapitalPais}</p>
                 <p>População: ${PopulacaoPais}</p>
                 <p>Horario: ${HorarioPais}</p>
             </div>
