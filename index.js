@@ -99,11 +99,20 @@ function StartRequest(opcao, nome) {
     console.log("quant", QuantidadePais)
     for (i = 0; i < QuantidadePais; i++) {
 
+      console.log(i)
+
+      response[i]
       NomePais = response[i].translations.por.common
       HorarioPais = response[i].timezones[0]
       BandeiraPais = response[i].flags.png
       PopulacaoPais = response[i].population
+
+      if(response[i].capital != undefined){
       CapitalPais = response[i].capital[0]
+      }
+      else{
+        CapitalPais = "Desconhecido"
+      }
 
       if(opcao == "Nome"){
         $(".title-regiao h2").html(NomePais)
