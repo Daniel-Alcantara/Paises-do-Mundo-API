@@ -7,12 +7,11 @@ $(document).ready(function () {
   var PopulacaoPais;
   var i = 0;
 
-
   var PesquisaPais;
-  var URLporNome;
 
   var RegiaoSelecionada_user;
-  var URLporRegiao;
+
+  StartRequest("all")
 
   // Função para quando filtragem por região
   $(".dropdown-item").click(function (e) {
@@ -21,7 +20,7 @@ $(document).ready(function () {
 
     $("#dropdownMenuLink").html(RegiaoSelecionada_user + " ")
 
-    RegiaoSelecionadaRequest(RegiaoSelecionada_user)
+    StartRequest("Regiao", RegiaoSelecionada_user)
 
   })
 
@@ -36,15 +35,57 @@ $(document).ready(function () {
 
     } else {
 
-      PesquisaPaisRequest(PesquisaPais)
+      StartRequest("Nome", PesquisaPais)
     }
   })
 
 
-  // Função ao iniciar site
+
+
+  // Função global
+
+})
+
+function StartRequest(opcao, nome) {
+
+  $(".conteudo_paises").html("")
+
+  if (opcao == "Regiao") {
+    if (nome == "Todos") {
+
+      URLEnvio = "https://restcountries.com/v3.1/all"
+      $(".title-regiao h2").html("Todos os Países")
+
+    }
+    else {
+
+      $(".title-regiao h2").html(nome)
+      if(nome == "Europa"){
+        nome = "Europe";
+      }
+      URLEnvio = "https://restcountries.com/v3.1/region/" + nome     
+      
+
+    }
+  }
+  else if (opcao == "Nome") {
+
+    URLEnvio = "https://restcountries.com/v3.1/name/" + nome
+
+    $("#dropdownMenuLink").html("Filtre pela Região")
+
+  } else if (opcao == "all") {
+
+    URLEnvio = "https://restcountries.com/v3.1/all"
+    $(".title-regiao h2").html("Todos os Países")
+    $("#dropdownMenuLink").html("Filtre pela Região")
+
+  }
+
+  console.log("URL", URLEnvio)
   $.ajax({
 
-    url: "https://restcountries.com/v3.1/all",
+    url: URLEnvio,
     type: "GET"
 
   }).done(function (response) {
@@ -60,7 +101,9 @@ $(document).ready(function () {
       BandeiraPais = response[i].flags.png
       PopulacaoPais = response[i].population
 
-
+      if(opcao == "Nome"){
+        $(".title-regiao h2").html(NomePais)
+      }
 
 
       $(".conteudo_paises").append(
@@ -84,131 +127,132 @@ $(document).ready(function () {
 
   });
 
+}
 
-  // Ajax por região selecionada
-  function RegiaoSelecionadaRequest(regiao) {
+//   // Ajax por região selecionada
+//   function RegiaoSelecionadaRequest(regiao) {
 
-    $(".conteudo_paises").html("")
+//     $(".conteudo_paises").html("")
 
-    if (regiao == "Todos") {
-      $(".title-regiao h2").html("Todos os Países")
+//     if (regiao == "Todos") {
+//       $(".title-regiao h2").html("Todos os Países")
 
-      URLporRegiao = "https://restcountries.com/v3.1/all"
-    }
-    else {
+//       URLporRegiao = "https://restcountries.com/v3.1/all"
+//     }
+//     else {
 
-      $(".title-regiao h2").html(regiao)
-      if (regiao == "Europa") {
+//       $(".title-regiao h2").html(regiao)
+//       if (regiao == "Europa") {
 
-        regiao = "Europe"
+//         regiao = "Europe"
 
-      }
+//       }
 
-      URLporRegiao = "https://restcountries.com/v3.1/region/" + regiao
+//       URLporRegiao = "https://restcountries.com/v3.1/region/" + regiao
 
-    }
+//     }
 
-    $.ajax({
+//     $.ajax({
 
-      url: URLporRegiao,
-      type: "GET"
+//       url: URLporRegiao,
+//       type: "GET"
 
-    }).done(function (response) {
-
-
-
-      QuantidadePais = response.length
-
-      for (i = 0; i < QuantidadePais; i++) {
-
-        NomePais = response[i].translations.por.common
-        HorarioPais = response[i].timezones[0]
-        BandeiraPais = response[i].flags.png
-        PopulacaoPais = response[i].population
+//     }).done(function (response) {
 
 
 
+//       QuantidadePais = response.length
 
-        $(".conteudo_paises").append(
-          `
-              <div class="box_pais mt-5">
-                <div class="image_pais">
-                    <img src="${BandeiraPais}" alt="">
-                </div>
-                <div class="nome_pais pt-2">
-                    <h3>${NomePais}</h3>
-                </div>
-                <div class="info_pais">
-                    <p>População: ${PopulacaoPais}</p>
-                    <p>Horario: ${HorarioPais}</p>
-                </div>
-            </div>
-            `
+//       for (i = 0; i < QuantidadePais; i++) {
 
-        )
-      }
-
-    });
-
-  }
+//         NomePais = response[i].translations.por.common
+//         HorarioPais = response[i].timezones[0]
+//         BandeiraPais = response[i].flags.png
+//         PopulacaoPais = response[i].population
 
 
-  // Requisição por Nome informado
-  function PesquisaPaisRequest(nome) {
-
-    $("#dropdownMenuLink").html("Filtre pela Região")
-
-    $(".conteudo_paises").html("")
-
-    URLporNome = "https://restcountries.com/v3.1/name/" + nome
-  
-
-    $(".name_pais").val("")
-
-    $.ajax({
-
-      url: URLporNome,
-      type: "GET"
-
-    }).done(function (response) {
 
 
-      QuantidadePais = response.length
+//         $(".conteudo_paises").append(
+//           `
+//               <div class="box_pais mt-5">
+//                 <div class="image_pais">
+//                     <img src="${BandeiraPais}" alt="">
+//                 </div>
+//                 <div class="nome_pais pt-2">
+//                     <h3>${NomePais}</h3>
+//                 </div>
+//                 <div class="info_pais">
+//                     <p>População: ${PopulacaoPais}</p>
+//                     <p>Horario: ${HorarioPais}</p>
+//                 </div>
+//             </div>
+//             `
 
-      for (i = 0; i < QuantidadePais; i++) {
+//         )
+//       }
 
-        NomePais = response[i].translations.por.common
-        HorarioPais = response[i].timezones[0]
-        BandeiraPais = response[i].flags.png
-        PopulacaoPais = response[i].population
+//     });
 
-        $(".title-regiao h2").html(NomePais)
+//   }
 
 
-        $(".conteudo_paises").append(
-          `
-            <div class="box_pais mt-5">
-              <div class="image_pais">
-                  <img src="${BandeiraPais}" alt="">
-              </div>
-              <div class="nome_pais pt-2">
-                  <h3>${NomePais}</h3>
-              </div>
-              <div class="info_pais">
-                  <p>População: ${PopulacaoPais}</p>
-                  <p>Horario: ${HorarioPais}</p>
-              </div>
-          </div>
-          `
+//   // Requisição por Nome informado
+//   function PesquisaPaisRequest(nome) {
 
-        )
-      }
+//     $("#dropdownMenuLink").html("Filtre pela Região")
 
-    });
+//     $(".conteudo_paises").html("")
 
-  }
+//     URLporNome = "https://restcountries.com/v3.1/name/" + nome
 
-})
+
+//     $(".name_pais").val("")
+
+//     $.ajax({
+
+//       url: URLporNome,
+//       type: "GET"
+
+//     }).done(function (response) {
+
+
+//       QuantidadePais = response.length
+
+//       for (i = 0; i < QuantidadePais; i++) {
+
+//         NomePais = response[i].translations.por.common
+//         HorarioPais = response[i].timezones[0]
+//         BandeiraPais = response[i].flags.png
+//         PopulacaoPais = response[i].population
+
+//         $(".title-regiao h2").html(NomePais)
+
+
+//         $(".conteudo_paises").append(
+//           `
+//             <div class="box_pais mt-5">
+//               <div class="image_pais">
+//                   <img src="${BandeiraPais}" alt="">
+//               </div>
+//               <div class="nome_pais pt-2">
+//                   <h3>${NomePais}</h3>
+//               </div>
+//               <div class="info_pais">
+//                   <p>População: ${PopulacaoPais}</p>
+//                   <p>Horario: ${HorarioPais}</p>
+//               </div>
+//           </div>
+//           `
+
+//         )
+//       }
+
+//     });
+
+//   }
+
+// })
 
 $(document).ajaxError(function () {
 
@@ -222,9 +266,10 @@ $(document).ajaxError(function () {
   setTimeout(
     function () {
 
-      $(".title-regiao h2").append("<br>Altere o Filtro ou digite um País novamente");
+      $("#dropdownMenuLink").html("Filtre pela Região")
       $(".title-regiao h2").css("color", "black")
-      $(".name_pais").css("border", "1px solid black")
+      $(".name_pais").css("border", "1px solid #ced4da")
+      StartRequest("all", "all")
 
 
     }, 2000);
