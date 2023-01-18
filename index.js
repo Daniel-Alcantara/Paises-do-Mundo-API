@@ -161,8 +161,7 @@ $(document).ready(function () {
     $(".conteudo_paises").html("")
 
     URLporNome = "https://restcountries.com/v3.1/name/" + nome
-
-    $(".title-regiao h2").html(nome)
+  
 
     $(".name_pais").val("")
 
@@ -183,7 +182,7 @@ $(document).ready(function () {
         BandeiraPais = response[i].flags.png
         PopulacaoPais = response[i].population
 
-
+        $(".title-regiao h2").html(NomePais)
 
 
         $(".conteudo_paises").append(
@@ -224,7 +223,7 @@ $(document).ajaxError(function () {
     function () {
 
       $(".title-regiao h2").append("<br>Altere o Filtro ou digite um País novamente");
-      $(".title-regiao h2").css("color", "white")
+      $(".title-regiao h2").css("color", "black")
       $(".name_pais").css("border", "1px solid black")
 
 
