@@ -12,6 +12,8 @@ $(document).ready(function () {
 
   var RegiaoSelecionada_user;
 
+
+  // Inicia função ao abrir a página
   StartRequest("all")
 
   // Função para quando filtragem por região
@@ -84,7 +86,6 @@ function StartRequest(opcao, nome) {
 
   }
 
-  console.log("URL", URLEnvio)
   $.ajax({
 
     url: URLEnvio,
@@ -92,14 +93,11 @@ function StartRequest(opcao, nome) {
 
   }).done(function (response) {
 
-    console.log(response)
 
     QuantidadePais = response.length
 
-    console.log("quant", QuantidadePais)
     for (i = 0; i < QuantidadePais; i++) {
 
-      console.log(i)
 
       response[i]
       NomePais = response[i].translations.por.common
