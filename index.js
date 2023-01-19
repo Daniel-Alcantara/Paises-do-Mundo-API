@@ -6,6 +6,7 @@ $(document).ready(function () {
   var BandeiraPais;
   var PopulacaoPais;
   var CapitalPais;
+  var NomeENG;
   var i = 0;
 
   var PesquisaPais;
@@ -93,17 +94,19 @@ function StartRequest(opcao, nome) {
 
   }).done(function (response) {
 
+    console.log(response)
 
     QuantidadePais = response.length
 
     for (i = 0; i < QuantidadePais; i++) {
 
 
-      response[i]
+
       NomePais = response[i].translations.por.common
       HorarioPais = response[i].timezones[0]
       BandeiraPais = response[i].flags.png
       PopulacaoPais = response[i].population
+      NomeENG = response[i].name.common
 
       if(response[i].capital != undefined){
       CapitalPais = response[i].capital[0]
@@ -128,6 +131,7 @@ function StartRequest(opcao, nome) {
             </div>
             <div class="info_pais">
                 <p>Capital: ${CapitalPais}</p>
+                <p>Nome Inglês: ${NomeENG}</p>
                 <p>População: ${PopulacaoPais}</p>
                 <p>Horario: ${HorarioPais}</p>
             </div>
